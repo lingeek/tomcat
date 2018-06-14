@@ -1,0 +1,26 @@
+# Systemd unit file for tomcat
+[Unit]
+Description=Apache Tomcat Web Application Container
+After=syslog.target network.target
+
+[Service]
+Type=forking
+
+Environment=JAVA_HOME=<%= scope.lookupvar("tomcat::params::jdk_path") %>/current
+Environment=CATALINA_PID=/opt/tomcat/temp/tomcat.pid
+Environment=CATALINA_HOME=/opt/tomcat/current
+Environment=CATALINA_BASE=/opt/tomcat/current
+Environment='CATALINA_OPTS=-Xms512M -Xmx1024M -server -XX:+UseParallelGC'
+Environment='JAVA_OPTS=-Djava.net.preferIPv4Stack=true -Djava.net.preferIPv4Addresses -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom'
+
+ExecStart=/opt/tomcat/current/bin/startup.sh
+ExecStop=/bin/kill -15 $MAINPID
+
+User=<%= scope.lookupvar("tomcat::params::user") %>
+Group=<%= scope.lookupvar("tomcat::params::group") %>
+UMask=002
+RestartSec=10
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
