@@ -26,14 +26,8 @@ class tomcat::config (
       path    => '/usr/bin/:/bin/',
       command => "systemctl daemon-reload",
       refreshonly => true,
-      #require => File["$tomcat_path/apache-tomcat-8.5.31.tar.gz"],
     }
 
-#service { "tomcat":
- # ensure   => running,
- # require  => Exec["systemd_reload"]
-
-#}
 
   }
 
