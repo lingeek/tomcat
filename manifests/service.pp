@@ -13,7 +13,7 @@ class tomcat::service (
     ensure    => $service_ensure,
     enable    => $service_status,
     name      => $service_name,
-    hasstatus => true,
+   hasstatus => true,
     require   => Class['tomcat::install'],
   }
 

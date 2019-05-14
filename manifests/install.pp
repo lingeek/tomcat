@@ -1,6 +1,6 @@
 class tomcat::install (
 
-
+#This values are taken from params.pp
   $tomcat_path   = $tomcat::params::tomcat_path,
   $tomcat_target   = $tomcat::params::tomcat_target,
   $user    =   $tomcat::params::user,
@@ -24,6 +24,8 @@ file {"$tomcat_path/temp":
     }
 
 
+
+
 file { "$tomcat_path/apache-tomcat-8.5.31.tar.gz":
       ensure              => file,
       owner             =>  $user,
@@ -39,6 +41,18 @@ file { "$tomcat_path/apache-tomcat-8.5.31.tar.gz":
       group   => $group,
       ensure => 'link',
       target => "$tomcat_path/apache-tomcat-8.5.31",
+
+
+    }
+
+
+
+    # preferred symlink syntax
+    file { "$tomcat_path/current/webapps":
+      owner    => $user,
+      group    => $group,
+      ensure   => 'directory',
+      mode     => '0755',
 
 
     }
@@ -65,6 +79,13 @@ file { "$tomcat_path/apache-tomcat-8.5.31.tar.gz":
       onlyif  => "test -f $tomcat_path/apache-tomcat-8.5.31.tar.gz",
       require => Exec["install_tomcat"],
 
+    }
+
+    tidy { "delete-webapps-folders":
+      path    => "$tomcat_path/current/webapps",
+      recurse => false,
+      matches => [ 'docs', 'examples', 'host-manager', 'manager', 'ROOT' ],
+      rmdirs  => false,
     }
 
 

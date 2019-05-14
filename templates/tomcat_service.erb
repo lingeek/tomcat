@@ -1,4 +1,5 @@
 # Systemd unit file for tomcat
+#This file is maintained by Puppet, any changes to this file will be reverted after 15 minutes
 [Unit]
 Description=Apache Tomcat Web Application Container
 After=syslog.target network.target
@@ -14,13 +15,15 @@ Environment='CATALINA_OPTS=-Xms512M -Xmx1024M -server -XX:+UseParallelGC'
 Environment='JAVA_OPTS=-Djava.net.preferIPv4Stack=true -Djava.net.preferIPv4Addresses -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom'
 
 ExecStart=/opt/tomcat/current/bin/startup.sh
-ExecStop=/bin/kill -15 $MAINPID
+ExecStop=/opt/tomcat/current/binshutdown.sh
 
 User=<%= scope.lookupvar("tomcat::params::user") %>
 Group=<%= scope.lookupvar("tomcat::params::group") %>
-UMask=002
+UMask=0007
 RestartSec=10
 Restart=always
+LimitNOFILE=150000
+
 
 [Install]
 WantedBy=multi-user.target
