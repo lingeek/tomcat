@@ -10,7 +10,7 @@ class tomcat::setup (
   {
 
     file { "$tomcat_server_file_path":
-      ensure  => $file_file,
+      ensure  => $file_present,
       content => template('tomcat/server_config.erb'),
       require => Class['tomcat::install'],
       notify => Class['tomcat::service'],
