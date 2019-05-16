@@ -48,7 +48,7 @@ file { "$tomcat_path/apache-tomcat-8.5.31.tar.gz":
 
 
     # preferred symlink syntax
-    file { "$tomcat_path/current/webapps":
+    file { "$tomcat_target/webapps":
       owner    => $user,
       group    => $group,
       ensure   => 'directory',
